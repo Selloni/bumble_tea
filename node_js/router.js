@@ -1,26 +1,20 @@
 import { Router } from "express"; // лписываем все маршруты
-import Post from "./post.js";
+import useController from "./useController.js"
 
 const router = new Router() // создаем экземпляр роутера
 
-router.post('/user', async (req, res) => { // передаем два параметра// async асинхронное подключение
-    try {
-        const { name, number, password } = req.body  // req - какие даные получаем
-        const user = await Post.create({ name, number, password }) //  подключаю асинхронно res.json(user)  // вывести сообщение на страницу
-        res.json(user)  // вывести сообщение на страницу
-    } catch (e) {  // вылавливает и выводит ошибки
-        res.status(500).json(e)
-    }
-    // console.log(req.body);
-    // console.log(req.query); // в адресную строку передаем query парметры (?ключ=значение&)
+router.post('/user', useController.create)  /// можно было засунь функцию, но следим за декомпозицией
 
-    // res.status(200).json('передаем любые данные')  // status(200) - передаю в постаманговорю, что в впорядке
+// console.log(req.body);
+// console.log(req.query); // в адресную строку передаем query парметры (?ключ=значение&)
 
-});
-router.get('/user/number');
-router.get('/user');
-router.put('/user/number');
-router.delete('/user/number');
+// res.status(200).json('передаем любые данные')  // status(200) - передаю в постаманговорю, что в впорядке
+router.get('/user/number/:number', useController.getone);
+// router.get('/user/number/:number/:count', useController.getone);
+router.put('/user/update', useController.update);
+
+router.get('/user/number', useController.getall);
+router.delete('/user/number/:name', useController.delete);
 
 export default router  // для импрорта в другой файл
 
